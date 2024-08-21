@@ -6,5 +6,5 @@ import com.example.demo.data.bean.LoginBean
 object AppGlobalData {
 
 
-    var loginData by KVCacheParcelableExt("", LoginBean::class.java)
+    var loginData by KVCacheParcelableExt("login_result", LoginBean::class.java)
 }

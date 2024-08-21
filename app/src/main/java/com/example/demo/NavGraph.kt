@@ -8,6 +8,7 @@ import com.example.demo.constants.RouteUrls
 import com.example.demo.page.login.LoginPage
 import com.example.demo.page.MainPage
 import com.example.demo.page.SplashPage
+import com.example.demo.page.setting.SettingPage
 
 
 object AppNavController {
@@ -32,11 +33,8 @@ fun AppNavGraph(
         composable(RouteUrls.MAIN) {
             MainPage()
         }
-        composable(RouteUrls.HOME) {
-
-        }
-        composable(RouteUrls.SYS) {
-
+        composable(RouteUrls.SETTING) {
+            SettingPage()
         }
     }
 }

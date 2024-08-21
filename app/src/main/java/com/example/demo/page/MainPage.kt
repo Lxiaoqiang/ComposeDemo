@@ -12,13 +12,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import com.example.demo.R
 import com.example.demo.page.home.HomePage
+import com.example.demo.page.mine.MinePage
 import com.example.demo.page.sys.SysPage
 import com.example.demo.ui.widget.BottomNavigationBar
 import com.example.demo.ui.widget.BottomNavigationItem
 
 private val bottomNavigationItems = listOf(
     BottomNavigationItem("首页", R.drawable.home),
-    BottomNavigationItem("知识", R.drawable.book)
+    BottomNavigationItem("知识", R.drawable.book),
+    BottomNavigationItem("我的", R.drawable.icon_mine)
 )
 
 var selectedHomeTabIndex by mutableIntStateOf(0)
@@ -31,7 +33,7 @@ fun MainPage() {
     ) {
 
         val pageState = rememberPagerState(initialPage = 0) {
-            2
+            3
         }
 
         HorizontalPager(
@@ -41,6 +43,7 @@ fun MainPage() {
             when(page) {
                 0 -> HomePage()
                 1 -> SysPage()
+                2 -> MinePage()
             }
         }
 

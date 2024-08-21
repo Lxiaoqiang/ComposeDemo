@@ -1,6 +1,5 @@
 package com.example.demo.page.login
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,8 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -36,16 +33,40 @@ import com.example.demo.AppNavController
 import com.example.demo.R
 import com.example.demo.component.showToast
 import com.example.demo.constants.RouteUrls
-import com.example.demo.ext.UIState
 import com.example.demo.ui.theme.AppColorsProvider
 import com.example.demo.ui.widget.CommonEditText
+import com.example.demo.ui.widget.LoadingView
 import com.example.demo.viewmodel.LoginViewModel
-
 
 @Composable
 fun LoginPage() {
-
     val loginViewModel: LoginViewModel = viewModel()
+
+    LaunchedEffect(Unit) {
+        loginViewModel.event.collect {
+            when(it) {
+                is LoginEvent.LoginSuccess -> {
+                    AppNavController.instantce.popBackStack()
+                    AppNavController.instantce.navigate(RouteUrls.MAIN)
+                }
+                is LoginEvent.LoginFailure -> {
+                    showToast(it.message ?: "")
+                }
+            }
+        }
+    }
+
+    LoginPage(loginViewModel) {
+        loginViewModel.onIntent(it)
+    }
+}
+
+@Composable
+internal fun LoginPage(
+    viewModel: LoginViewModel,
+    loginIntent: (LoginIntent) -> Unit
+) {
+
 
     var username = remember {
         mutableStateOf("")
@@ -55,23 +76,6 @@ fun LoginPage() {
         mutableStateOf("")
     }
 
-    val loginResult = loginViewModel.state.collectAsState(initial = UIState.onState())
-
-    
-    LaunchedEffect(loginResult.value) {
-        when(loginResult.value) {
-            is UIState.Success -> {
-                AppNavController.instantce.popBackStack()
-                AppNavController.instantce.navigate(RouteUrls.MAIN)
-            }
-            is UIState.Error -> {
-                showToast((loginResult.value as UIState.Error).error.errorMsg)
-            }
-            else -> {
-                Log.d("lhq_sf", "${loginResult}")
-            }
-        }
-    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -191,7 +195,7 @@ fun LoginPage() {
                     containerColor = AppColorsProvider.current.primary
                 ),
                 onClick = {
-                    loginViewModel.login(username.value, password.value)
+                    loginIntent(LoginIntent.LoginClick(username.value, password.value))
                 }
             ) {
                 Text(
@@ -202,6 +206,9 @@ fun LoginPage() {
                     )
                 )
             }
+        }
+        if (viewModel.state.isLoading) {
+            LoadingView(modifier = Modifier.align(Alignment.Center))
         }
     }
 
