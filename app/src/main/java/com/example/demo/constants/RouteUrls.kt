@@ -6,4 +6,5 @@ object RouteUrls {
     const val MAIN = "main"
     const val HOME = "home"
     const val SYS = "sys"
+    const val SETTING = "setting"
 }

@@ -4,14 +4,17 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -37,8 +40,8 @@ fun <T> ViewStateComponent(
     when (uiState) {
         is UIState.Success -> {
             if (uiState.data == null) {
-                if (errorComponent != null) {
-                    emptyComponent?.invoke()
+                if (emptyComponent != null) {
+                    emptyComponent.invoke()
                 } else {
                     ViewCommonStateComponent(clickState = ClickState.EMPTY, click = loadData)
                 }
@@ -48,6 +51,7 @@ fun <T> ViewStateComponent(
         }
 
         is UIState.Loading -> {
+            LoadingView(modifier = Modifier)
         }
 
         is UIState.Error -> {
@@ -59,6 +63,21 @@ fun <T> ViewStateComponent(
         }
 
         else -> {}
+    }
+}
+
+@Composable
+fun LoadingView(
+    modifier: Modifier
+) {
+    Box(
+        modifier = modifier
+    ) {
+        CircularProgressIndicator(
+            color = Color.Blue,
+            modifier = modifier
+                .size(100.dp)
+        )
     }
 }
 
