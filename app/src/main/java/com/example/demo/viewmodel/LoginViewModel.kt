@@ -3,6 +3,7 @@ package com.example.demo.viewmodel
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.demo.data.AppGlobalData
@@ -22,7 +23,9 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel(
+    private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     private val mRepository = Repository()
 
@@ -33,16 +36,7 @@ class LoginViewModel : ViewModel() {
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
-            flow {
-                kotlinx.coroutines.delay(2000)
-                val loginBean = LoginBean(username, password)
-                AppGlobalData.loginData = loginBean
-                emit(UIState.onSuccess(loginBean))
-            }.flowOn(Dispatchers.IO).onStart {
-                emit(UIState.onLoading())
-            }.catch {
-                emit(it.toUIState())
-            }.collect {
+            mRepository.login(username, password).collect {
                 when (it) {
                     is UIState.Success -> {
                         event.emit(LoginEvent.LoginSuccess)
@@ -58,7 +52,6 @@ class LoginViewModel : ViewModel() {
 
                     else -> {}
                 }
-
             }
         }
     }

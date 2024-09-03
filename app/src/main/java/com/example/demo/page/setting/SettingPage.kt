@@ -32,7 +32,7 @@ fun SettingPage() {
                     title = AppTitleBarParameterType.TitleText("设置")
                 )
             ) {
-                AppNavController.instantce.popBackStack()
+                AppNavController.instantce.navigateUp()
             }
             Spacer(modifier = Modifier.fillMaxWidth().height(50.dp))
             Text(text = "设置中心", modifier = Modifier)

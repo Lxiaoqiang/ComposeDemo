@@ -46,7 +46,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WindowCompat.setDecorFitsSystemWindows(window, false)
-//        enableEdgeToEdge()
+        enableEdgeToEdge()
         setContent {
             DemoTheme {
                 val navController = rememberNavController()

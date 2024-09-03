@@ -55,4 +55,15 @@ class ExampleUnitTest {
         awaitClose()
     }
 
+
+    @Test
+    fun `for inline`(){
+        foo {
+
+        }
+    }
+
+    inline fun foo(fx:() -> Unit) {
+
+    }
 }

@@ -40,6 +40,7 @@ fun MainPage() {
             modifier = Modifier.weight(1F),
             state = pageState
         ) { page: Int ->
+            selectedHomeTabIndex = pageState.currentPage
             when(page) {
                 0 -> HomePage()
                 1 -> SysPage()
